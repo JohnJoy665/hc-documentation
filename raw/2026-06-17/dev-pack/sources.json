@@ -1,0 +1,138 @@
+[
+  {
+    "title": "Websoft HCM: среда разработки (главная)",
+    "url": "https://news.websoft.ru/_wt/6680061488781884204/watype/6680054725638828770",
+    "parent": null,
+    "output_file": "docs/00-overview.md",
+    "status": "completed",
+    "notes": "Основной обзор раздела разработки" 
+  },
+  {
+    "title": "Агент в системе Websoft HCM",
+    "url": "https://news.websoft.ru/_wt/wiki_base/673570...", 
+    "parent": "Websoft HCM: среда разработки",
+    "output_file": "docs/01-agents.md",
+    "status": "completed",
+    "notes": "Описание типов и назначения агентов" 
+  },
+  {
+    "title": "Глобальные настройки системы (global_settings)",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?global_settings",
+    "parent": "Websoft HCM: среда разработки",
+    "output_file": "docs/02-global-settings.md",
+    "status": "completed",
+    "notes": "Список глобальных параметров и объяснение" 
+  },
+  {
+    "title": "Настройки settings",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?settings",
+    "parent": "Глобальные настройки системы",
+    "output_file": "docs/02-global-settings.md",
+    "status": "completed",
+    "notes": "Параметры объекта settings" 
+  },
+  {
+    "title": "Редактор программного кода Websoft OmniCode for HCM",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?OmniCode",
+    "parent": "Websoft HCM: среда разработки",
+    "output_file": "docs/03-omnicode.md",
+    "status": "completed",
+    "notes": "Инсталляция, интерфейс, работа с объектами, C# и JS" 
+  },
+  {
+    "title": "Языки разработки",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?languages",
+    "parent": "Websoft HCM: среда разработки",
+    "output_file": "docs/04-development-languages.md",
+    "status": "completed",
+    "notes": "Обзор Server-Side JS, C# и XQuery" 
+  },
+  {
+    "title": "Server-Side JavaScript",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?ssjs",
+    "parent": "Языки разработки",
+    "output_file": "docs/05-server-side-javascript.md",
+    "status": "partial",
+    "notes": "Формы .xmd и .xms, встроенные функции, объекты и переменные" 
+  },
+  {
+    "title": "C#",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?csharp",
+    "parent": "Языки разработки",
+    "output_file": "docs/06-csharp.md",
+    "status": "completed",
+    "notes": "Руководство по C#-объектам и примерам" 
+  },
+  {
+    "title": "Синтаксис XQuery запросов",
+    "url": "https://news.websoft.ru/_wt/wiki_base/6735700257609166038/",
+    "parent": "Языки разработки",
+    "output_file": "docs/07-xquery.md",
+    "status": "completed",
+    "notes": "Описание синтаксиса, примеры запросов, морфологический поиск" 
+  },
+  {
+    "title": "Встроенные библиотеки",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?built_in_libs",
+    "parent": "Websoft HCM: среда разработки",
+    "output_file": "docs/08-built-in-libraries.md",
+    "status": "completed",
+    "notes": "Обзор библиотек Tools, Tools_library, Tools_web и Ms_tools" 
+  },
+  {
+    "title": "Tools library",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?tools",
+    "parent": "Встроенные библиотеки",
+    "output_file": "docs/09-tools-library.md",
+    "status": "partial",
+    "notes": "Категории функций и примеры" 
+  },
+  {
+    "title": "Tools_web",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?tools_web",
+    "parent": "Встроенные библиотеки",
+    "output_file": "docs/10-tools-web.md",
+    "status": "partial",
+    "notes": "Функции для веб-интерфейса и XSS" 
+  },
+  {
+    "title": "Библиотеки программного кода",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?code_libs",
+    "parent": "Websoft HCM: среда разработки",
+    "output_file": "docs/11-code-libraries.md",
+    "status": "partial",
+    "notes": "Описание концепции, вызов функций, список библиотек" 
+  },
+  {
+    "title": "Интерфейс системы – описание XAML разметки",
+    "url": "https://news.websoft.ru/_wt/wiki_base/...?xaml",
+    "parent": "Websoft HCM: среда разработки",
+    "output_file": "docs/12-system-interface.md",
+    "status": "partial",
+    "notes": "Общий обзор интерфейса и ссылок на XAML" 
+  },
+  {
+    "title": "API – общий обзор",
+    "url": "https://news.websoft.ru/_wt/6735700257609166038/idparent/6735698490931494621/watype/6680054725638828770",
+    "parent": "Websoft HCM: среда разработки",
+    "output_file": "docs/14-api-overview.md",
+    "status": "partial",
+    "notes": "Версии API, низкоуровневый и высокоуровневый доступ" 
+  },
+  {
+    "title": "Принципы организации доступа (API v3)",
+    "url": "https://news.websoft.ru/_wt/wiki_base/6735702551142867452/", 
+    "parent": "API v3",
+    "output_file": "docs/16-api-v3.md",
+    "status": "partial",
+    "notes": "Многоуровневая модель безопасности, профили и приложения" 
+  },
+  {
+    "title": "JS CMI5 Tool",
+    "url": "https://news.websoft.ru/_wt/wiki_base/6735702551142867452/",
+    "parent": "Внешние библиотеки",
+    "output_file": "docs/20-external-libraries.md",
+    "status": "completed",
+    "notes": "Библиотека для стандарта cmi5" 
+  }
+]

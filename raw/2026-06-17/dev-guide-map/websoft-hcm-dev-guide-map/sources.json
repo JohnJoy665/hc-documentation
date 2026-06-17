@@ -1,0 +1,275 @@
+[
+  {
+    "title": "Агент в системе WebSoft HCM",
+    "url": "https://news.websoft.ru/_wt/agent",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Статья описывает назначение и типы серверных агентов, выполняющих автоматические процессы в WebSoft HCM.",
+    "status": "opened"
+  },
+  {
+    "title": "Глобальные настройки системы (global_settings)",
+    "url": "https://news.websoft.ru/_wt/global_settings",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "В разделе перечислены ключевые параметры объекта global_settings и их влияние на работу портала.",
+    "status": "opened"
+  },
+  {
+    "title": "Настройки settings",
+    "url": "https://news.websoft.ru/_wt/global_settings/settings",
+    "parent": "Глобальные настройки системы (global_settings)",
+    "description": "Подраздел содержит десятки параметров, определяющих поведение портала (admin_not_auth, allow_self_register и т.д.).",
+    "status": "opened"
+  },
+  {
+    "title": "Редактор программного кода WebSoft OmniCode for HCM (с релиза 2023.2)",
+    "url": "https://news.websoft.ru/_wt/omnicode",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "OmniCode — расширение VS Code для разработки серверного кода WebSoft HCM.",
+    "status": "opened"
+  },
+  {
+    "title": "Инструкция по установке OmniCode",
+    "url": "https://news.websoft.ru/_wt/omnicode/install",
+    "parent": "Редактор программного кода WebSoft OmniCode for HCM (с релиза 2023.2)",
+    "description": "Рекомендации по установке расширения OmniCode и подключению к серверу WebSoft HCM.",
+    "status": "opened"
+  },
+  {
+    "title": "Интерфейс OmniCode",
+    "url": "https://news.websoft.ru/_wt/omnicode/interface",
+    "parent": "Редактор программного кода WebSoft OmniCode for HCM (с релиза 2023.2)",
+    "description": "Описаны компоненты интерфейса OmniCode: список серверов, область кода, консоль.",
+    "status": "opened"
+  },
+  {
+    "title": "Работа с объектами в OmniCode",
+    "url": "https://news.websoft.ru/_wt/omnicode/objects",
+    "parent": "Редактор программного кода WebSoft OmniCode for HCM (с релиза 2023.2)",
+    "description": "Перечислены типы объектов (агенты, библиотеки, действия, выборки), которые можно создавать и редактировать через OmniCode.",
+    "status": "opened"
+  },
+  {
+    "title": "Логи и отладка OmniCode",
+    "url": "https://news.websoft.ru/_wt/omnicode/logs",
+    "parent": "Редактор программного кода WebSoft OmniCode for HCM (с релиза 2023.2)",
+    "description": "Информация о хранении логов (каталог Logs) и включении режима отладки при помощи параметра DOTNETCORE-DEBUG.",
+    "status": "opened"
+  },
+  {
+    "title": "Работа с C# в OmniCode",
+    "url": "https://news.websoft.ru/_wt/omnicode/csharp",
+    "parent": "Редактор программного кода WebSoft OmniCode for HCM (с релиза 2023.2)",
+    "description": "Раздел о создании объектов на C#, поддержке отладки и подключении зависимостей (осмотрено частично).",
+    "status": "opened"
+  },
+  {
+    "title": "Работа с Server-Side JavaScript в OmniCode",
+    "url": "https://news.websoft.ru/_wt/omnicode/ssjs",
+    "parent": "Редактор программного кода WebSoft OmniCode for HCM (с релиза 2023.2)",
+    "description": "Поддержка создания и тестирования скриптов на серверном JavaScript (осмотрено частично).",
+    "status": "opened"
+  },
+  {
+    "title": "Языки разработки",
+    "url": "https://news.websoft.ru/_wt/languages",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Список языков программирования, поддерживаемых в WebSoft HCM (C# и Server-Side JS).",
+    "status": "opened"
+  },
+  {
+    "title": "Server-Side JavaScript",
+    "url": "https://news.websoft.ru/_wt/languages/ssjs",
+    "parent": "Языки разработки",
+    "description": "Обзор серверного JavaScript как основного языка бизнес-логики в системе; ссылка на внешнюю документацию SP-XML и docs.datex.ru.",
+    "status": "opened"
+  },
+  {
+    "title": "Формы описания данных (.xmd)",
+    "url": "https://news.websoft.ru/_wt/languages/ssjs/xmd_forms",
+    "parent": "Server-Side JavaScript",
+    "description": "Справочная заметка о том, что формы описания данных документируются в системе SP-XML; подробности отсутствуют.",
+    "status": "opened"
+  },
+  {
+    "title": "Экранные формы (.xms)",
+    "url": "https://news.websoft.ru/_wt/languages/ssjs/xms_forms",
+    "parent": "Server-Side JavaScript",
+    "description": "Указано, что экранные формы (.xms) подробно описаны в справочной системе SP-XML; на странице нет деталей.",
+    "status": "opened"
+  },
+  {
+    "title": "C#",
+    "url": "https://news.websoft.ru/_wt/languages/csharp",
+    "parent": "Языки разработки",
+    "description": "Страница о языке C#, используемом для создания удалённых действий и библиотек; детали не рассматривались.",
+    "status": "opened"
+  },
+  {
+    "title": "Встроенные библиотеки",
+    "url": "https://news.websoft.ru/_wt/libraries",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Меню встроенных библиотек функций (Tools, Tools_library, Tools_web, Ms_tools и др.).",
+    "status": "opened"
+  },
+  {
+    "title": "Библиотека Tools",
+    "url": "https://news.websoft.ru/_wt/libraries/tools",
+    "parent": "Встроенные библиотеки",
+    "description": "Большая коллекция функций для работы с данными, строками, датами, XML, файловой системой и другими задачами; есть раздел устаревших функций.",
+    "status": "opened"
+  },
+  {
+    "title": "activate_course_to_event (пример функции)",
+    "url": "https://news.websoft.ru/_wt/libraries/tools/activate_course_to_event",
+    "parent": "Библиотека Tools",
+    "description": "Функция предназначена для назначения курса участникам мероприятия; описаны аргументы и возвращаемые значения.",
+    "status": "opened"
+  },
+  {
+    "title": "Библиотека Tools_library",
+    "url": "https://news.websoft.ru/_wt/libraries/tools_library",
+    "parent": "Встроенные библиотеки",
+    "description": "Функции для работы с учебными материалами. Пример: convert_pdf_library_material конвертирует PDF в читаемый формат.",
+    "status": "opened"
+  },
+  {
+    "title": "Библиотека Tools_web",
+    "url": "https://news.websoft.ru/_wt/libraries/tools_web",
+    "parent": "Встроенные библиотеки",
+    "description": "Библиотека функций для веб-интерфейса и безопасности; справочник расположен в файле wtv_tools_web.xml.",
+    "status": "opened"
+  },
+  {
+    "title": "Библиотека Ms_tools",
+    "url": "https://news.websoft.ru/_wt/libraries/ms_tools",
+    "parent": "Встроенные библиотеки",
+    "description": "Содержит несколько функций, описанных в ms_tools.xml.",
+    "status": "opened"
+  },
+  {
+    "title": "Библиотеки программного кода",
+    "url": "https://news.websoft.ru/_wt/code_libraries",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Раздел об использовании библиотек программного кода (.js и .pl) и вызове их методов через tools.call_code_library_method.",
+    "status": "opened"
+  },
+  {
+    "title": "Общая точка входа для получения параметров из библиотеки",
+    "url": "https://news.websoft.ru/_wt/code_libraries/get_process_param",
+    "parent": "Библиотеки программного кода",
+    "description": "Описан вызов tools.get_process_param() для получения параметров бизнес-процесса из кода библиотеки или приложения.",
+    "status": "opened"
+  },
+  {
+    "title": "Перечень библиотек (libMain, libAnalytics, ...)",
+    "url": "https://news.websoft.ru/_wt/code_libraries/list",
+    "parent": "Библиотеки программного кода",
+    "description": "Меню содержит многочисленные библиотеки (libMain, libAnalytics, libApplication и др.), которые не были подробно рассмотрены.",
+    "status": "opened"
+  },
+  {
+    "title": "Интерфейс системы",
+    "url": "https://news.websoft.ru/_wt/interface",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Раздел посвящён XAML-разметке, используемой для создания экранных форм и элементов интерфейса.",
+    "status": "opened"
+  },
+  {
+    "title": "Описание XAML-разметки",
+    "url": "https://news.websoft.ru/_wt/interface/xaml",
+    "parent": "Интерфейс системы",
+    "description": "Справочник по элементам XAML с описанием атрибутов и примеров; содержит длинный список элементов управления.",
+    "status": "opened"
+  },
+  {
+    "title": "Action — описание вызываемого действия",
+    "url": "https://news.websoft.ru/_wt/interface/xaml/action",
+    "parent": "Описание XAML-разметки",
+    "description": "Статья объясняет назначение тега <Action>, который представляет удалённое действие, исполняемое сервером; описаны параметры и события.",
+    "status": "opened"
+  },
+  {
+    "title": "Синтаксис XQuery запросов",
+    "url": "https://news.websoft.ru/_wt/xquery_syntax",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Описание общих правил синтаксиса XQuery: объявление переменных, условия, сортировка и возврат результата.",
+    "status": "opened"
+  },
+  {
+    "title": "Запросы XQuery",
+    "url": "https://news.websoft.ru/_wt/xquery_syntax/queries",
+    "parent": "Синтаксис XQuery запросов",
+    "description": "Поясняет использование XQuery для выборок из базы WebSoft HCM и показывает общий шаблон запроса for/where/order by/return.",
+    "status": "opened"
+  },
+  {
+    "title": "Настройка и использование словоформ в XQuery",
+    "url": "https://news.websoft.ru/_wt/xquery_syntax/wordforms",
+    "parent": "Синтаксис XQuery запросов",
+    "description": "Определяет, как включить поддержку морфологических словоформ в поисковых запросах XQuery через установку патча и библиотек.",
+    "status": "opened"
+  },
+  {
+    "title": "Поиск по конкретной фразе (XQuery)",
+    "url": "https://news.websoft.ru/_wt/xquery_syntax/exact_phrase",
+    "parent": "Синтаксис XQuery запросов",
+    "description": "Меню пункт, посвящённый поиску точной фразы; контент не был просмотрен.",
+    "status": "not_visited"
+  },
+  {
+    "title": "Внешние библиотеки",
+    "url": "https://news.websoft.ru/_wt/external_libs",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Раздел для сторонних библиотек; содержит один подраздел — JS CMI5 Tool.",
+    "status": "opened"
+  },
+  {
+    "title": "JS CMI5 Tool",
+    "url": "https://news.websoft.ru/_wt/external_libs/cmi5tool",
+    "parent": "Внешние библиотеки",
+    "description": "JavaScript‑библиотека для обмена данными по стандарту cmi5; содержит функции GetData и PutData для получения и отправки состояния курсов.",
+    "status": "opened"
+  },
+  {
+    "title": "API",
+    "url": "https://news.websoft.ru/_wt/api",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Общее описание API WebSoft HCM, его назначение и поддерживаемые варианты: SOAP/XML (версия 1) и JSON (версия 3).",
+    "status": "opened"
+  },
+  {
+    "title": "API версия 1",
+    "url": "https://news.websoft.ru/_wt/api/v1",
+    "parent": "API",
+    "description": "Раздел о старой версии API на SOAP/XML; не был подробно просмотрен.",
+    "status": "not_visited"
+  },
+  {
+    "title": "API версия 3",
+    "url": "https://news.websoft.ru/_wt/api/v3",
+    "parent": "API",
+    "description": "Раздел о современной версии API на базе OpenAPI/JSON; не был подробно просмотрен.",
+    "status": "not_visited"
+  },
+  {
+    "title": "Редактор веб-страниц",
+    "url": "https://news.websoft.ru/_wt/web_page_editor",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Пункт меню для редактора веб-страниц; доступ к содержимому в данном проходе не осуществлялся.",
+    "status": "not_visited"
+  },
+  {
+    "title": "Рекомендации по функциональному дизайну выборок, удалённых действий и показателей",
+    "url": "https://news.websoft.ru/_wt/design_guidelines",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Раздел с методическими рекомендациями по проектированию выборок, удалённых действий и показателей; не посещён.",
+    "status": "not_visited"
+  },
+  {
+    "title": "Кэширование в системе",
+    "url": "https://news.websoft.ru/_wt/caching",
+    "parent": "Websoft HCM: среда разработки",
+    "description": "Описание механизмов кэширования в WebSoft HCM; не посещено в данном проходе.",
+    "status": "not_visited"
+  }
+]

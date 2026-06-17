@@ -1,0 +1,55 @@
+# Websoft HCM Development Documentation
+
+## Overview
+
+* [Overview](docs/00-overview.md)
+
+## Core development
+
+* [Agents](docs/01-agents.md)
+* [Global settings](docs/02-global-settings.md)
+* [OmniCode](docs/03-omnicode.md)
+* [Development languages](docs/04-development-languages.md)
+* [Server‑Side JavaScript](docs/05-server-side-javascript.md)
+* [C#](docs/06-csharp.md)
+* [XQuery](docs/07-xquery.md)
+
+## Libraries
+
+* [Built‑in libraries](docs/08-built-in-libraries.md)
+* [Tools library overview](docs/09-tools-library.md)
+* [Tools_web overview](docs/10-tools-web.md)
+* [Code libraries](docs/11-code-libraries.md)
+* [Tools functions](libraries/tools-functions.md)
+* [Tools_library functions](libraries/tools-library-functions.md)
+* [Tools_web functions](libraries/tools-web-functions.md)
+* [Ms_tools functions](libraries/ms-tools-functions.md)
+* [Code libraries list](libraries/code-libraries.md)
+
+## Interface
+
+* [System interface](docs/12-system-interface.md)
+* [XAML reference](docs/13-xaml-reference.md)
+* [XAML elements](xaml/xaml-elements.md)
+
+## API
+
+* [API overview](docs/14-api-overview.md)
+* [API v1](docs/15-api-v1.md)
+* [API v3](docs/16-api-v3.md)
+* [API v1 reference](api/api-v1-reference.md)
+* [API v3 reference](api/api-v3-reference.md)
+
+## Other
+
+* [Web page editor](docs/17-web-page-editor.md)
+* [Design guidelines](docs/18-design-guidelines.md)
+* [Caching](docs/19-caching.md)
+* [External libraries](docs/20-external-libraries.md)
+* [Common mistakes](docs/21-common-mistakes.md)
+* [Examples](docs/22-examples.md)
+
+## Progress and sources
+
+* [Progress report](progress-report.md)
+* [Sources list](sources.json)

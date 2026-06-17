@@ -1,0 +1,46 @@
+# Глоссарий
+
+- `Request` - объект Web-сервера, доступный при обработке HTTP-запроса в серверном коде WebTutor.
+- `Request.Query` - параметры URL и POST-формы по материалам API routing.
+- `Request.Body` - тело HTTP-запроса строкой по материалам API routing.
+- `Request.AuthUserID` - идентификатор фактически определенного пользователя; использовался в диагностике авторизации.
+- `Request.Session` - сессия запроса; из нее в материалах читали `Env`.
+- `Request.DropSession` - метод сброса сессии, встречается в logout-файлах.
+- `Response` - объект HTTP-ответа.
+- `Response.Write` - запись строки в HTTP-ответ.
+- `Response.AddHeader` - добавление HTTP-заголовка; использовалось для диагностического заголовка logout.
+- `tools_web.user_init` - функция инициализации пользователя по `Request` и параметрам запроса.
+- `tools_web.set_cookie_auth` - функция работы с cookie-авторизацией; встречается в logout-файлах.
+- `Env.curUserID` - идентификатор текущего пользователя в окружении сессии.
+- `Env.curUser` - текущий пользователь в окружении сессии.
+- `x-auth-id` - cookie/тикет авторизации, очищается встроенным logout и настраивается через `xhttp_config.json`.
+- `user_login` - cookie, очищалась встроенным logout в проверенном кейсе.
+- `user_password` - cookie, очищалась встроенным logout в проверенном кейсе.
+- `Authorization: Basic` - HTTP-заголовок Basic Auth; не очищается через `Set-Cookie`.
+- `LogoutPath` - параметр `xhttp_config.json`, задающий путь logout.
+- `RedirectLoggedOffUri` - параметр `xhttp_config.json`, задающий страницу после выхода.
+- `loggedoff.html` - страница после logout; в кейсе помогла выявить Basic/NTLM тип авторизации узла.
+- `portal_auth_type` - тип авторизации портала/узла, встречался как `curHost.portal_auth_type`.
+- `cookie / Form-Based` - тип авторизации узла, решивший проблему повторного входа после logout в локальном кейсе.
+- `Basic Auth` - HTTP Basic-аутентификация, при которой браузер может кэшировать credentials.
+- `x-local://` - внутренняя схема WebTutor для обращения к файлам из серверного кода; не является клиентским URL для браузера.
+- `_wt` - короткий URL-префикс портала; требует дополнительной документации.
+- `router.html` - серверный HTML-хендлер, используемый как единая точка входа backend API.
+- `Server.Execute` - выполнение серверного include/файла.
+- `AppDirectoryPath` - функция получения пути приложения, встречается в вызовах `Server.Execute(AppDirectoryPath() + ...)`.
+- `OpenCodeLib` - открытие библиотеки кода в паттерне `router.html`.
+- `CallObjectMethod` - вызов метода объекта/библиотеки в паттерне `router.html`.
+- `tools.object_to_text` - сериализация объекта в текст; в источнике использовалась для JSON.
+- `GetOptProperty` - безопасное чтение свойства с fallback-значением.
+- `xhttp_config.json` - конфигурационный файл xHTTP WebSoft HCM.
+- `Authentication` - секция `xhttp_config.json` для правил аутентификации.
+- `XAuthIdOptions` - секция/настройки для multi `x-auth-id`.
+- `AllowedHosts` - секция ограничения доступных host names.
+- `ResponseHeadersRules` - секция управления HTTP-заголовками xHTTP.
+- `DefaultTicketCacheLifeTime` - время жизни локального кэша bearer-токена по PDF.
+- `AspNetMappings` - обязательный с версии 2023.2 параметр обратной совместимости с `Websoft.Mapping.HCM` по PDF.
+- `db set type postgresql` - команда x-shell для переключения учебного контура на PostgreSQL.
+- `db init` - команда инициализации структуры базы.
+- `db migrate from xml` - команда миграции из XML-хранилища.
+- `rctg start` - команда перестройки каталогов и индексов.
+- `internal server language` - в этом репозитории используется формулировка «внутренний серверный язык WebTutor» вместо автоматического приравнивания серверного кода к обычному JavaScript.

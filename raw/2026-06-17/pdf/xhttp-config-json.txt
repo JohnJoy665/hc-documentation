@@ -1,0 +1,284 @@
+--- PAGE 1 ---
+Портал клиентов Websoft
+news.websoft.ru/_wt/6817734862151962800
+Дата создания: 20.04.2020 (обновлено 23.04.2026)
+Пункты 1-4, 7 актуальны для сервера WebSoft HCM, работающего в режиме сервис.
+В случае работы через IIS данные параметры настраиваются на стороне IIS.
+1. а) Для использования смешанной аутентификации (Basic и Windows) необходимо
+добавить в файл ...\WebSoftServer\xhttp_config.json секцию Authentication с
+указанием имён портала, для которых будет использоваться Windows-
+аутентификация:
+"Authentication":
+[
+{
+"Host": "wsportalwin.websoft.ru",
+"Scheme": "Negotiate",
+},
+{
+"Host": "*",
+"Scheme": "None",
+"Exclusions": ["/default", "/lrs/*", "/webtutor/*", "/verify.html"],
+"TicketStoreExpiration": "01:00:00",
+"BearerTokenAllowed": true,
+"LogoutPath": "/logout",
+"RedirectLoggedOffUri": "/loggedoff.html"
+}
+],
+Для остальных будет использоваться Basic.
+Подробнее в инструкции Настройка Windows Authentication (Kerberos/NTLM) при
+работе WebSoft HCM как Служба.
+1. б) Схема авторизации, необходимая для работы x-auth-id и bearer токенов
+(возможно несколько данных секций): "Authentication":
+[
+{
+"Host": "*",
+"Scheme": "None",
+"Exclusions":
+1/10
+
+--- PAGE 2 ---
+["/default","/lrs/*","/webtutor/*","/verify.html","/token_redirect_for_omnic
+ode.html","/mobileservice/datafeed.xml*"],
+"TicketStoreExpiration": "01:00:00",
+"BearerTokenAllowed": true,
+"LogoutPath": "/logout",
+"RedirectLoggedOffUri": "/loggedoff.html"
+}
+], , где:
+Host - указать, для каких адресов будет применяться правило(* - для всех);
+TicketStoreExpiration - время жизни x-auth-id;
+BearerTokenAllowed - возможность использовать bearer токен.
+При использовании нескольких секций в Authentication последняя должна иметь
+"Host": "*"
+1. в) Схема авторизации, необходимая для работы x-auth-id при работе с
+несколькими хостами одного домена. В секцию Authentication необходимо
+добавитьсекцию XAuthIdOptions с параметрами:
+"UseMultiXAuthId": true — включить использование нового варианта
+авторизационной куки. По умолчанию false;
+"MultiXAuthIdExpiration": "1.00:00:00" — время жизни общей авторизационной
+куки. По умолчанию 1 сутки;
+"SignXAuthId": true — подписывать общую авторизационную куку. По умолчанию
+false;
+"HashKey": "" — ключ(строка) для хеширования подписи. По умолчанию
+генерируется рандомная строка при старте;
+"CompressMultiXAuthIdString": false — сжимать содержимое общей куки. По
+умолчанию false;
+"EncryptSignature": true — дополнительно шифровать подпись сертификатом.
+По умолчанию false;
+"CookieSecure": true — включить параметр Secure для общей авторизационной
+куки. По умолчанию true;
+2/10
+
+--- PAGE 3 ---
+"CookieName": "multi-x-auth-id" — имя общей авторизационной куки, по
+умолчанию multi-x-auth-id.
+1. г) Для списка разрешенных хостов абсолютных URL указывается
+массив AllowedAbsoluteRedirects
+"Authentication":
+[
+{
+"Host": "*",
+"Scheme": "None",
+"Exclusions":
+[
+"/default","/lrs/*","/webtutor/*","/verify.html","/token_redirect_for_omnico
+de.html","/mobileservice/datafeed.xml*","/services/mediasoup_ws_service" ],
+"BearerTokenAllowed": true,
+"RedirectLoggedOffUri": "/loggedoff.html",
+"TicketStoreExpiration": "01:00:00",
+"AllowedAbsoluteRedirects": ["ya.ru","google.com"],
+},
+]
+2. а) Для работы портала по протоколу https - добавить в
+файл ...\WebSoftServer\xhttp_config.json в секцию EndPoints
+секцию HttpsInlineCertStore:
+"HttpsInlineCertStore":
+{
+"Url": "https://*:443",
+3/10
+
+--- PAGE 4 ---
+"Address": "192.168.0.33",
+"Certificate": {
+"Subject": "*.websoft.ru",
+"Store": "My",
+"Location": "LocalMachine",
+"AllowInvalid": "true"
+}
+}
+, где:
+Url- нужно указать только порт(по умолчанию 443);
+Address - ip-адрес сервера;
+Certificate- название и путь к установленному сертификату в хранилище
+сертификатов:
+Certificat.Subject - поле Subject в свойствах сертификата;
+Certificat.Store - хранилище сертификатов;
+Certificat.Location - расположение хранилища сертификатов;
+Certificat.AllowInvalid - разрешить использовать недопустимые
+сертификаты(например самоподписанные).
+Подробнее в инструкции Настройка работы портала WebSoft HCM через https
+(служба).
+4/10
+
+--- PAGE 5 ---
+2. б) Для работы портала по протоколу https с разными ssl сертификатами - добавить
+в файл ...\WebSoftServer\xhttp_config.json в секцию EndPoints секцию
+MySniEndpoint(вместо секции HttpsInlineCertStore):
+"MySniEndpoint":
+{
+"Url": "https://*",
+"Sni": {
+"test.websoft.ru": {
+"Certificate": {
+"Subject": "*.websoft.ru", // имя сертификата
+"Store": "My", // хранилище
+сертификатов, My = Personal
+"Location": "LocalMachine",
+"AllowInvalid": "true"
+}
+},
+"name.domain.ru": {
+"Certificate": {
+"Subject": "*.domain.ru", // имя сертификата
+"Store": "My", // хранилище
+сертификатов, My = Personal
+"Location": "LocalMachine",
+"AllowInvalid": "true"
+}
+}
+}
+}
+Пример файла конфига с разными ssl сертификатам в конце статьи
+(xhttp_config(разные ssl).json).
+2. в) Настройка HTTP протоколов и версий TLS/SSL
+5/10
+
+--- PAGE 6 ---
+Для настройки протоколов и версий TLS/SSL в секции с описанием https узла
+используются параметры "Protocols" и "SSLProtocols".
+Возможные значения параметра "Protocols":
+- Http1 - только HTTP/1.1
+- Http2 - только HTTP/2
+- Http3 - только HTTP/3
+- Http1AndHttp2 - HTTP/1.1 и HTTP/2 (рекомендуемое)
+- Http1AndHttp2AndHttp3 - все три версии HTTP
+Для использования Http/2 требуется указывать TLS версии 1.2 и выше; для Http/3 -
+TLS версии 1.3
+Возможные значения параметра "SSLProtocols":
+TLS 1.0 (устаревший, не рекомендуется)
+TLS 1.1 (устаревший, не рекомендуется)
+TLS 1.2 (безопасен, минимальная рекомендуемая версия)
+TLS 1.3 (безопасен, рекомендуется)
+Если параметр "SSLProtocols" не указан - по умолчанию используются настройки ОС.
+3. Для настройки доступности сервера только по определённым именам необходимо
+добавить в файл ...\WebSoftServer\xhttp_config.json секцию AllowedHosts с
+указанием необходимых доменных имён:
+"AllowedHosts":
+[
+"wtportal.websoft.ru",
+"wtportalwin.websoft.ru",
+"localhost"
+],
+В таком случае по другим именам сервер будет не доступен.
+6/10
+
+--- PAGE 7 ---
+4. Для настройки работы портала WebSoft HCM на разных портах необходимо в
+конфигурационном файле ...\WebSoftServer\xhttp_config.json через запятую повторить
+секцию Http, изменив её название на произвольное(например добавить цифру к
+названию) и указать необходимый порт, по которому должен быть доступен портал:
+5. Для одновременного открытия большего количества маленьких файлов требуется
+большее количество io worker threads на один сервис.
+Для настройки необходимо в файле ...\WebSoftServer\xhttp_config.json добавить
+секцию WorkerThreads с указанием минимального количества threads:
+7/10
+
+--- PAGE 8 ---
+"WorkerThreads":
+{
+"MinWorkerThreads":"750",
+"MinIOCThreads":"1000",
+"MaxWorkerThreads":"0",
+"MaxIOCThreads":"0",
+},
+6. Для настройки числа соединений необходимо в файле
+...\WebSoftServer\xhttp_config.json добавить секцию Limits с параметрами:
+"Limits": {
+"MaxConcurrentConnections": 800, // Default is null (i.e. no maximum)
+"MaxConcurrentUpgradedConnections": 800, // Default is null (i.e. no
+maximum)
+"MaxRequestBodySize": 536870912, // 512MB. Default is 30MB. Use
+[RequestSizeLimit(100000000)] attribute to use more.
+"MaxRequestHeaderCount": 100 // Default is 100
+},
+MaxConcurrentConnections"- задает максимальное число открытых соединений;
+MaxConcurrentUpgradedConnections - задает максимальное число открытых,
+обновленных соединений. Обновленное соединение — это подключение, которое
+было переключено с HTTP на другой протокол, например WebSockets;
+MaxRequestBodySize - задает максимально допустимый размер тела запроса в
+байтах;
+MaxRequestHeaderCount - задает максимально допустимое количество заголовков на
+HTTP-запрос.
+7. Управление заголовками а) Для того чтобы убрать определённые http-заголовки
+из ответов сервера, необходимо в файле ...\WebSoftServer\xhttp_config.json добавить
+секцию ResponseHeadersRules:
+"ResponseHeadersRules": [ { "Host":"*", "Remove": ["Server"]
+} ]
+, где:
+Host - указать, для каких адресов будет применяться правило(* - для всех);
+Remove- перечислить заголовки, которые нужно убрать из ответов сервера.
+8/10
+
+--- PAGE 9 ---
+б) Для того чтобы добавить, аналогично
+используется секция ResponseHeadersRules:
+"ResponseHeadersRules":
+[
+{
+"Host":"*",
+"Add": {"<Имя_заголовка>":"<Значение_заголовка>"}
+}
+]
+Пример файла доступен в конце статьи
+в) Также можно указать заголовки, позволяющие, например, снизить уязвимость
+"ResponseHeadersRules":
+[
+{
+"Host":"*",
+"Remove": ["Server"],
+"Add": {"Content-Security-Policy":"default-src 'self'; script-src 'self'
+'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;
+font-src 'self' data:; frame-ancestors 'self'; form-action 'self';",
+"X-Frame-Options":"sameorigin",
+"X-Content-Type-Options":"nosniff",
+"Cache-Control":"max-age=604800; must-revalidate"},
+}
+]
+, где: "X-Frame-Options" - позволяет снизить уязвимость вашего сайта для
+кликджекинг - атак. Есть три варианта конфигурации: sameorigin, deny, allow-from/ Не
+все браузеры поддерживают этот вариант, так что проверьте заголовок на
+совместимость перед тем, как его добавлять;
+"X-Content-Type-Options" - можно предотвратить атаки с использованием
+9/10
+
+--- PAGE 10 ---
+подмены MIME типов. Только один параметр: “nosniff”;
+"Cache-Control" - это HTTP-заголовок, который определяет поведение браузера
+при кэшировании
+8. С версии 2023.2 обязательны строки: "DefaultTicketCacheLifeTime" : 600,
+"AspNetMappings":
+[
+{
+"Enabled": true,
+"Assembly": "Websoft.Mapping.HCM.dll",
+"Type": "Websoft.Mapping.HCM",
+"Properties":
+{
+"UserIdExpirationSec":60
+}
+}
+]
+, где: DefaultTicketCacheLifeTime - время жизни локального кэша bearer токена;
+AspNetMappings - Параметр всегда должен быть указан для обратной совместимости
+с компонентом Websoft.Mapping.HCM.
+10/10
