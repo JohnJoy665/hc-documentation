@@ -2,6 +2,44 @@
 
 ## Покрытые темы
 
+### Платформа SP-XML и внутренний серверный язык
+
+- `docs/platform/spxml-platform-overview.md` - назначение SP-XML, состав платформы, базы, `x-local://`, `x-db-obj://`, конфигурационные файлы.
+- `docs/platform/spxml-application-structure.md` - структура приложения, кэш документов, модули, библиотеки V1/V2.
+- `docs/server-language/spxml-script-differences.md` - отличия SP-XML Script от внешних ECMAScript-сред.
+- `rag/platform/spxml_platform.md` - SP-XML как платформа.
+- `rag/platform/spxml_databases.md` - базы `data`, `data_local`, `trash`, URL документов.
+- `rag/platform/configuration_files.md` - `SpXml.ini`, `xHttp.ini`, `SpXml2.ini`, `xHttp1.ini`.
+- `rag/server-language/spxml_script_differences.md` - атомарная заметка по отличиям языка.
+
+### Встроенные функции SP-XML
+
+- `docs/spxml-functions/functions-overview.md` - обзор групп встроенных функций SP-XML.
+- `rag/spxml-functions/string_bytes_vs_chars.md` - строки: байты и символы.
+- `rag/spxml-functions/array_direct_vs_select_all.md` - `ArrayDirect()` и `ArraySelectAll()`.
+- `rag/spxml-functions/xml_document_open_fetch_cache.md` - `OpenDoc()`, `FetchDoc()` и кэш.
+- `rag/spxml-functions/object_property_set_opt_lock.md` - динамическое чтение/запись свойств.
+- `rag/spxml-functions/json_encode_parse.md` - `EncodeJson()` и `ParseJson()`.
+- `rag/spxml-functions/html_encode_plain_text.md` - HTML-кодирование и plain text.
+- `rag/spxml-functions/code_execution_eval_family.md` - функции выполнения кода.
+- `rag/spxml-functions/date_parse_format.md` - даты: разбор и форматирование.
+- `rag/spxml-functions/url_load_put_exists.md` - URL-функции чтения/записи/проверки.
+- `rag/spxml-functions/filesystem_read_write_delete.md` - обзор файловых функций.
+
+### Агенты сервера
+
+- `docs/agents/server-agents.md` - агенты сервера WebTutor / WebSoft HCM.
+- `rag/agents/server_agents.md` - базовая заметка по агентам.
+- `rag/agents/agent_alert_diagnostics.md` - `alert(...)` как диагностический вывод агента.
+
+### Динамические методы и свойства объектов
+
+- `docs/code-libraries/object-dynamic-methods.md` - `CallObjectMethod`, `CallObjectMethodWithLock`, `GetObjectProperty`, `GetClassObjectPropertyNames`.
+- `rag/code-libraries/call_object_method.md`
+- `rag/code-libraries/call_object_method_with_lock.md`
+- `rag/code-libraries/get_object_property.md`
+- `rag/code-libraries/get_class_object_property_names.md`
+
 ### Установка и локальный контур
 
 - `docs/installation/installation-pack-overview.md` - обзор install-pack.
@@ -42,10 +80,11 @@
 
 ## Слабые или пустые области
 
-- Полный справочник внутреннего серверного языка WebTutor.
+- Полный справочник внутреннего серверного языка WebTutor частично покрыт через SP-XML функции, но требует сверки по версиям.
 - Полный справочник объектов `Request`, `Response`, `Session`.
 - Детальные функции `Tools`, `Tools_web`, `Tools_library`, `Ms_tools`.
 - Полные карточки объектов и каталогов.
+- Настройка агентов в администраторе по PDF требует OCR/ручной проверки.
 - XQuery пока покрыт только через карту раздела, без отдельной документации.
 - XAML и интерфейс пока покрыты только через карту раздела.
 - PDF по карточке узла и настройке аутентификации узла требуют OCR/ручной проверки.
@@ -56,3 +95,7 @@
 - API-хендлеры зависят от корректной проверки пользователя через `tools_web.user_init`, `Env.curUserID`, `Request.AuthUserID`.
 - `router.html` использует `Request.Query`, `Request.Body`, `Response.Write` и серверные пути `x-local://`.
 - Локальный PostgreSQL-стенд связан с installation pack и темой external database.
+- Агенты сервера связаны с внутренним серверным языком WebTutor, `XQuery`, `OpenDoc`, `TopElem`, `Save()`.
+- `CallObjectMethod` и `GetObjectProperty` связаны с API routing, где методы и свойства могут вызываться динамически.
+- `FetchDoc()` связан с кэшем документов, описанным в структуре приложения.
+- Строковые функции связаны с правилом о бинарно-совместимых строках SP-XML Script.
