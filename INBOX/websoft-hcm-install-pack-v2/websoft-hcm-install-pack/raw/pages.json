@@ -1,0 +1,209 @@
+[
+  {
+    "title": "Технические требования",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894",
+    "section": "Установка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Содержит системные требования, поддерживаемые ОС, сведения о технологиях JavaScript, .NET и прочее"
+  },
+  {
+    "title": "WebSoft HCM сервер",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#server",
+    "section": "Установка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Обзор различных вариантов установки: Docker, Linux, Windows, создание тестового стенда, установка демо-контента"
+  },
+  {
+    "title": "WebSoft HCM через Docker образ",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#docker-image",
+    "section": "Установка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Пошаговая установка HCM в Docker: требования к ОС, команда docker run, монтирование томов и переменных окружения"
+  },
+  {
+    "title": "WebSoftIDM через Docker",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#idmdocker",
+    "section": "Установка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Инструкция по развёртыванию WebSoftIDM в контейнере Docker: подготовка среды, настройка переменных, примеры docker-compose"
+  },
+  {
+    "title": "WebSoft HCM под Alt Linux",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#alt-linux",
+    "section": "Установка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Пошаговая установка на дистрибутив Alt Linux: установка зависимостей, создание пользователя, настройка сервисов"
+  },
+  {
+    "title": "WebSoft HCM под Windows",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#windows",
+    "section": "Установка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Установка сервера WebSoft HCM на Windows: запуск MSI, настройка IIS, установка компонентов"
+  },
+  {
+    "title": "Компоненты для работы с внешней БД",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#external-db-components",
+    "section": "Настройка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Описание компонентов .NET и Node.js, необходимых для внешних баз данных, и параметры подключения"
+  },
+  {
+    "title": "Инструкция по смене collation у внешней БД на UNICODE",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#external-db-collation",
+    "section": "Настройка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Объясняет, как изменить кодировку (collation) базы данных MSSQL на UNICODE, чтобы избежать ошибок при обновлении"
+  },
+  {
+    "title": "Мануал по созданию базы MSSQL вручную",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#manual-mssql",
+    "section": "Настройка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Пошаговое создание базы MSSQL для WebSoft HCM, включая настройку пользователей и прав"
+  },
+  {
+    "title": "Перенос данных на MSSQL",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#external-db-migration",
+    "section": "Настройка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Описывает миграцию с XML или других СУБД на MSSQL: команды x-shell db set type mssql, db create, db init, db migrate и восстановление индексов"
+  },
+  {
+    "title": "Always On для MSSQL",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#external-db-alwayson",
+    "section": "Настройка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Настройка подключения WebSoft HCM к Always On: использование слушателя, параметры MultiSubnetFailover и AlwaysOnApplicationIntentStrategy, список реплик"
+  },
+  {
+    "title": "PostgreSQL и перенос данных",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#external-db-postgres",
+    "section": "Настройка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Описывает особенности PostgreSQL (лимит 10 МБ на CDATA) и процесс миграции: db set type pgsql, db create, db init, db migrate, rctg start"
+  },
+  {
+    "title": "Запуск WebSoft HCM как Сервис",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#service",
+    "section": "Настройка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Инструкция по созданию службы Windows для WebSoft HCM: команда x-shell set type service, команда sc create, настройка автоматического старта и прав"
+  },
+  {
+    "title": "Настройка отправки почтовых уведомлений",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#mail",
+    "section": "Настройка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Настройка SMTP: адрес отправителя, сервер, порт, аутентификация, параметры TLS/SSL через свойства уведомления email1"
+  },
+  {
+    "title": "Настройка HTTPS (служба Windows)",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#https-service",
+    "section": "Настройка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Настройка HTTPS при запуске HCM как службы Windows: конфигурация xhttp_config.json, подбор сертификата, создание узла и перезапуск сервиса"
+  },
+  {
+    "title": "Настройка HTTPS в Docker",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#https-docker",
+    "section": "Настройка",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Настройка HTTPS для контейнера: редактирование xhttp_config.json, добавление сертификата, проброс порта 443, монтирование файлов и перезапуск контейнера"
+  },
+  {
+    "title": "Общие рекомендации по безопасности",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#security-guidelines",
+    "section": "Информационная безопасность",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Рекомендации по защите: проверка источников дистрибутива, отключение встроенного администратора, обязательное HTTPS, настройки cookie, пароли и ролевая модель"
+  },
+  {
+    "title": "Схема защиты WebSoft HCM",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#security-scheme",
+    "section": "Информационная безопасность",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Сетевая схема: размещение портала за WAF в DMZ, наличие межсетевого экрана, использование HTTPS только пассивного проксирования, нет модификации трафика"
+  },
+  {
+    "title": "Резервное копирование WebSoft HCM",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#maintenance-backup",
+    "section": "Обслуживание",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Рекомендации по резервному копированию: ежедневные дифференциальные и еженедельные полные копии, копирование каталога WebSoftServer и дампов СУБД"
+  },
+  {
+    "title": "Пересоздание индексов Lucene",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#maintenance-index",
+    "section": "Обслуживание",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Инструкция по отключению агента WT_FT_UPDATE, удалению старых индексов и пересозданию через команду rctg start"
+  },
+  {
+    "title": "Снижение производительности (диагностика)",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#maintenance-slow",
+    "section": "Обслуживание",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Советы по сбору статистики через /http_info, проверке нагрузки, сбору логов и диагностике базы данных"
+  },
+  {
+    "title": "Обновление WebSoft HCM (общие рекомендации)",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#update-guidelines",
+    "section": "Обновление",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Описывает общий порядок обновления: создание тестового стенда, резервное копирование, остановка сервиса, обновление файлов и базы"
+  },
+  {
+    "title": "Заглушка на время работ",
+    "url": "https://docs.websoft.ru/_wt/67387113511338054212/diparent/69247367959797/watype/6682650392188845894#update-maintenance-page",
+    "section": "Обновление",
+    "extracted": true,
+    "has_attachments": false,
+    "attachment_urls": [],
+    "notes": "Статья о создании страницы заглушки во время обслуживания: статическая HTML страница или встроенный режим обслуживания"
+  }
+]

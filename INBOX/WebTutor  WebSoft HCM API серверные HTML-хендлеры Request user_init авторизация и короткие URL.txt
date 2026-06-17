@@ -1,0 +1,1199 @@
+# Отчет по исследованию WebTutor / WebSoft HCM API: серверные HTML-хендлеры, Request, user_init, авторизация и короткие URL
+
+## Оглавление
+
+1. [Цель исследования](#цель-исследования)
+2. [Главный практический вывод](#главный-практический-вывод)
+3. [Где в WT живет серверный код](#где-в-wt-живет-серверный-код)
+4. [Прямой HTML-хендлер в `wt/web`](#прямой-html-хендлер-в-wtweb)
+5. [HTML-файл как код шаблона портала](#html-файл-как-код-шаблона-портала)
+6. [Короткие URL `/_wt`](#короткие-url-_wt)
+7. [`x-local://` и обычные клиентские пути](#x-local-и-обычные-клиентские-пути)
+8. [Объект `Request`](#объект-request)
+9. [`Request.AuthUserID`](#requestauthuserid)
+10. [`tools_web.user_init`](#tools_webuser_init)
+11. [`user_init.html`](#user_inithtml)
+12. [Как WT определяет текущего пользователя](#как-wt-определяет-текущего-пользователя)
+13. [Проверка на локальном стенде](#проверка-на-локальном-стенде)
+14. [Сценарий после logout](#сценарий-после-logout)
+15. [Сценарий в чистом незалогиненном браузере](#сценарий-в-чистом-незалогиненном-браузере)
+16. [Что важно для кастомных API](#что-важно-для-кастомных-api)
+17. [Пример старого API-хендлера](#пример-старого-api-хендлера)
+18. [HTTP-статусы, JSON-ответы и логирование](#http-статусы-json-ответы-и-логирование)
+19. [Важные ловушки](#важные-ловушки)
+20. [Что нужно искать дальше](#что-нужно-искать-дальше)
+21. [Предварительные правила для будущей локальной документации](#предварительные-правила-для-будущей-локальной-документации)
+
+---
+
+## Цель исследования
+
+Цель исследования — разобраться, как в WebTutor / WebSoft HCM устроены серверные HTML-страницы, которые могут использоваться как кастомные API-хендлеры, и как в таких хендлерах определить текущего пользователя.
+
+Исходная проблема: в WT серверный код часто пишется внутри `.html`-файлов в блоках:
+
+```html
+<%
+    // серверный код WT
+%>
+```
+
+Такие файлы могут быть не только обычными HTML-страницами, но и серверными endpoint-ами, к которым фронтенд обращается HTTP-запросом.
+
+В ходе исследования отдельно рассматривались:
+
+* размещение HTML-файлов в `wt/web`;
+* прямой доступ к таким файлам по URL;
+* короткие URL `/_wt`;
+* шаблоны портала;
+* объект `Request`;
+* `Request.AuthUserID`;
+* функция `tools_web.user_init`;
+* include-файл `user_init.html`;
+* поведение авторизации после logout;
+* влияние Basic Auth, `SessionID` и `x-auth-id`.
+
+---
+
+## Главный практический вывод
+
+Физический `.html`-файл, размещенный в актуальной папке сервера:
+
+```text
+WebSoftServer/wt/web/test.html
+```
+
+может открываться напрямую:
+
+```text
+http://localhost/test.html
+```
+
+И внутри него может выполняться серверный код WT, если он написан в блоке:
+
+```html
+<%
+    ...
+%>
+```
+
+После исправления ошибки с путём к серверу было подтверждено, что прямой доступ работает. Изначально файл был положен в папку старого сервера, оставшуюся до миграции на PostgreSQL, поэтому `http://localhost/test.html` возвращал 404.
+
+После размещения файла в актуальной папке сервера тестовая страница открылась напрямую, а вызов:
+
+```js
+oUserInit = tools_web.user_init(Request, Request.Query);
+```
+
+показал корректную авторизацию пользователя `user1`.
+
+---
+
+## Где в WT живет серверный код
+
+В ходе исследования обнаружено минимум три варианта размещения серверного кода в WT.
+
+Первый вариант — физический `.html`-файл в папке:
+
+```text
+WebSoftServer/wt/web/
+```
+
+Такой файл может открываться напрямую через URL, например:
+
+```text
+http://portal.ru/company_name/project_name/api.html
+```
+
+Второй вариант — внешний файл шаблона. Код шаблона может быть написан в HTML или XAML-файле, который также лежит внутри подпапки:
+
+```text
+WebSoftServer/wt/web/
+```
+
+После этого путь к нему указывается в карточке настраиваемого шаблона в поле:
+
+```text
+Ссылка на шаблон
+```
+
+Третий вариант — код прямо в карточке настраиваемого шаблона. В этом случае код хранится в базе данных и редактируется через интерфейс администратора. Тип выполняемого кода может быть JavaScript или C#.
+
+Важное различие: файл в `wt/web` может быть как самостоятельным endpoint-ом, так и исходником для шаблона портала. Это разные сценарии вызова.
+
+---
+
+## Прямой HTML-хендлер в `wt/web`
+
+Самый простой вариант кастомного серверного HTML-хендлера:
+
+```text
+WebTutorServer/wt/web/my_page.html
+```
+
+и обращение к нему:
+
+```text
+http://portal.ru/my_page.html
+```
+
+Рекомендация из практики: не класть кастомные файлы прямо в корень `wt/web`, а создавать отдельный каталог проекта, например:
+
+```text
+WebTutorServer/wt/web/company_name/project_name/my_page.html
+```
+
+и обращаться к нему так:
+
+```text
+http://portal.ru/company_name/project_name/my_page.html
+```
+
+Это важно по нескольким причинам:
+
+* легче отделять кастомный код от системного;
+* проще переносить проект;
+* меньше риск конфликта с системными файлами;
+* удобнее поддерживать структуру;
+* в кластере такие файлы нужно размещать на всех нодах.
+
+Для будущей документации важно отдельно зафиксировать: прямой HTML-хендлер — это обычный физический файл в `wt/web`, который открывается по соответствующему URL и может выполнять серверный код в `<% ... %>`.
+
+---
+
+## HTML-файл как код шаблона портала
+
+Документация по управлению программным кодом шаблона показала, что программный код шаблона может задаваться двумя способами:
+
+1. Во внешнем HTML/XAML-файле.
+2. Прямо в карточке настраиваемого шаблона.
+
+Если код задается во внешнем файле, то этот файл размещается в подпапке:
+
+```text
+WebSoftServer\wt\web
+```
+
+А имя файла указывается в карточке шаблона в поле:
+
+```text
+Ссылка на шаблон
+```
+
+В карточке шаблона есть раздел «Код». При открытии карточки в этот раздел автоматически загружается содержимое связанного файла. Для несистемного кода его можно редактировать прямо в карточке и сохранять обратно на сервер.
+
+В карточке доступны действия:
+
+* «Сохранить на сервере»;
+* «Перезагрузить с сервера»;
+* «Загрузить локально».
+
+Если код хранится прямо в карточке шаблона, он находится в базе данных и изменяется через интерфейс администратора.
+
+С релиза 2023.2 добавление подключаемых элементов в карточке шаблона и обработка их на портале больше недоступны. Список подключаемых шаблонов отображается только если он не пустой.
+
+Практический вывод: внешний HTML-файл может не быть самостоятельной страницей. Он может быть кодом шаблона, который вызывается через механизм портала, `view_doc.html`, `mode` или короткий URL `/_wt`.
+
+---
+
+## Короткие URL `/_wt`
+
+В WT есть модель коротких URL. Она работает автоматически и не требует отдельной настройки.
+
+Для динамических разделов портала используется шаблон:
+
+```text
+<domain>/_wt/<mode>/<параметр>/<значение>/...
+```
+
+Где:
+
+```text
+<mode> — значение mode шаблона, на основе которого сформирован раздел портала.
+```
+
+Пример стандартного URL:
+
+```text
+/view_doc.html?mode=boss_panel&doc_id=5670815205671258301
+```
+
+может быть заменен на:
+
+```text
+/_wt/boss_panel/doc_id/5670815205671258301
+```
+
+Для карточек объектов используется схема:
+
+```text
+<domain>/_wt/<code>/<object_ID>/doc_id/<ID>
+```
+
+Например стандартная ссылка:
+
+```text
+/view_doc.html?mode=course&doc_id=5896011168173666687&object_id=5371650452201307123
+```
+
+может быть заменена на:
+
+```text
+/_wt/course/5371650452201307123
+```
+
+Для разделов портала возможны варианты:
+
+```text
+/_wt/<ID>/doc_id/<ID>
+/_wt/doc/doc_id/<ID>
+```
+
+Важный вывод: `/_wt` — это не физическая папка и не прямой доступ к файлам из `wt/web`. Это роутинг портала поверх `mode`, шаблонов, карточек объектов и разделов.
+
+Поэтому если открыть:
+
+```text
+http://localhost/_wt/test.html
+```
+
+это не означает, что система открывает физический файл:
+
+```text
+wt/web/test.html
+```
+
+С высокой вероятностью `test.html` в таком URL трактуется как `mode` или элемент портального маршрута.
+
+---
+
+## `x-local://` и обычные клиентские пути
+
+Был найден важный практический фрагмент про подключение JS-файлов в HTML-шаблон.
+
+Ошибка:
+
+```html
+<script src="x-local://wt/web/js/script.js"></script>
+```
+
+Причина: `x-local://` работает на стороне сервера. Это внутренняя серверная схема WT, которую можно использовать, например, в `Server.Execute`:
+
+```js
+Server.Execute("x-local://wt/web/timesheet/methods.html");
+```
+
+Но браузер не понимает `x-local://`, поэтому его нельзя использовать в клиентском HTML как `src` или `href`.
+
+Для браузера нужно использовать обычный web-путь. Если файл лежит тут:
+
+```text
+wt/web/js/script.js
+```
+
+то подключать его нужно примерно так:
+
+```html
+<script src="js/script.js"></script>
+```
+
+или так:
+
+```html
+<script src="/js/script.js"></script>
+```
+
+В системных шаблонах встречаются подключения вида:
+
+```html
+<script src="scripts/jquery.js"></script>
+<link href="app_player/wt.css" rel="stylesheet" />
+<script src="app_player/wt.js"></script>
+```
+
+Также найден важный нюанс: если WT работает в кластере, физические файлы должны быть размещены на всех нодах.
+
+Отдельная мелкая, но важная ошибка: в HTML должен быть атрибут `src`, а не `scr`.
+
+---
+
+## Объект `Request`
+
+`Request` — это объект Web-сервера, доступный при обработке HTTP-запроса.
+
+В документации был найден список атрибутов и методов объекта `Request`:
+
+```text
+Request
+AllSessions
+AuthLogin
+AuthObject
+AuthPassword
+AuthUserID
+Body
+Form
+Header
+Method
+Query
+QueryString
+RemoteIP
+RespContentType
+RespStream
+Session
+Url
+UrlHost
+UrlParam
+UrlPath
+AddRespHeader
+CheckLdsAuth
+Execute
+HandleNotFound
+PermanentRedirect
+Redirect
+SetRespStatus
+SetWrongAuth
+```
+
+Для темы авторизации и API наиболее важны:
+
+```text
+Request
+AuthUserID
+AuthLogin
+AuthObject
+Session
+Query
+QueryString
+Form
+Header
+Body
+Method
+Redirect
+SetRespStatus
+SetWrongAuth
+CheckLdsAuth
+```
+
+`Request` сам по себе существует при web-запросе, но это не означает, что в нем автоматически есть текущий пользователь в удобном виде. Текущий пользователь появляется после выполнения авторизационной логики, например через `tools_web.user_init` или системные include-файлы.
+
+---
+
+## `Request.AuthUserID`
+
+В документации найдено описание атрибута:
+
+```js
+Request.AuthUserID
+```
+
+Он возвращает ID пользователя авторизованного запроса.
+
+Для запросов от клиентской части `SpXml.exe` переменная устанавливается автоматически на основании результата вызова `OnCheckAuth`.
+
+Для запросов к Web-странице переменная может быть установлена вручную авторизационным кодом Web-страницы.
+
+Пример из документации:
+
+```html
+AUTHUSERID: <%=Request.AuthUserID%><br/>
+```
+
+Также есть пример ручной установки:
+
+```js
+Request.AuthUserID = curUserID;
+```
+
+Важный вывод: для обычной web-страницы `Request.AuthUserID` — это не обязательно автоматическая магия. Значение может появиться после выполнения авторизационного кода страницы.
+
+На локальном стенде было подтверждено, что после вызова `tools_web.user_init(Request, Request.Query)` у залогиненного пользователя:
+
+```text
+Request.AuthUserID = 6148914691236517121
+```
+
+То есть `Request.AuthUserID` действительно может использоваться как ID текущего пользователя, но важно понимать, на каком этапе он заполняется.
+
+---
+
+## `tools_web.user_init`
+
+Функция:
+
+```js
+tools_web.user_init(Request, Request.Query)
+```
+
+описана в документации как функция авторизации/инициализации пользователя на портале.
+
+Синтаксис:
+
+```js
+tools_web.user_init(<Request>, <Request_Query>)
+```
+
+Первый аргумент — объект HTTP-запроса.
+
+Второй аргумент — объект JavaScript с параметрами инициализации. В нем могут быть поля:
+
+```text
+auth_type
+set_auth
+user_login
+user_password
+logout
+```
+
+и другие.
+
+Примеры из документации:
+
+```js
+oUserInit = tools_web.user_init(Request, Request.Query);
+
+oUserInit = tools_web.user_init(Request, { 'auth_type': 'basic' });
+
+oUserInit = tools_web.user_init(Request, ({
+    "auth_type": "mobile",
+    "set_auth": true,
+    "logout": true
+}));
+
+oUserInit = tools_web.user_init(Request, ({
+    "auth_type": "cookie",
+    "set_auth": "1",
+    "user_login": Request.AuthLogin,
+    "user_password": Request.AuthPassword
+}));
+
+var oUserInit = tools_web.user_init(Request, {});
+
+bNotAuthorized = tools_web.user_init(Request, Request.Query).access == false;
+```
+
+Важная неточность документации: в описании возвращаемого значения указано, что тип — булево. Но по факту и по примерам видно, что возвращается объект `oUserInit`, у которого есть свойства:
+
+```text
+access
+error_code
+auth_type
+auth_login
+curHost
+curSite
+curEnvUrl
+redirect
+error_text
+auth_error_command
+```
+
+На стенде были подтверждены как минимум:
+
+```text
+oUserInit.access
+oUserInit.error_code
+oUserInit.auth_type
+oUserInit.auth_login
+```
+
+Также найдено важное указание: программное описание функций библиотеки `Tools_web` находится в файле:
+
+```text
+..\WebTutorServer\wtv\wtv_tools_web.xml
+```
+
+Там нужно уточнять порядок аргументов и детали функций.
+
+---
+
+## `user_init.html`
+
+Был найден полный код системного include-файла:
+
+```text
+wt/web/include/user_init.html
+```
+
+Это один из ключевых файлов для понимания авторизации на портале.
+
+В начале он вызывает:
+
+```js
+oUserInit = tools_web.user_init(Request, Request.Query);
+```
+
+Затем читает окружение из сессии:
+
+```js
+Env = Request.Session.GetOptProperty("Env", ({}));
+
+curUserID = Env.GetOptProperty('curUserID', null);
+curUser = Env.GetOptProperty('curUser', null);
+curHostName = Env.GetOptProperty('curHostName', '');
+curHostPath = Env.GetOptProperty('curHostPath', '');
+curAnonymousAccess = Env.GetOptProperty('curAnonymousAccess', false);
+curHostID = Env.GetOptProperty("curHostID", null);
+curSiteID = Env.GetOptProperty("curSiteID", null);
+```
+
+Также из `oUserInit` берутся:
+
+```js
+curHost = oUserInit.curHost;
+curSite = oUserInit.curSite;
+curEnvUrl = oUserInit.curEnvUrl;
+```
+
+Если доступа нет:
+
+```js
+if (!curUserInitIgnorRedirect && !oUserInit.access)
+```
+
+файл сам обрабатывает ошибки авторизации.
+
+Среди обрабатываемых ошибок:
+
+```text
+redirect
+host_not_found
+web_banned
+is_time_access
+brute_password
+empty_login
+empty_password
+```
+
+Для `ntlm` и `basic` вызывается:
+
+```js
+Response.SetWrongAuth()
+```
+
+или:
+
+```js
+Response.SetWrongAuth('basic=0;ntlm=1;')
+```
+
+Для некоторых сценариев выполняется:
+
+```js
+Response.Redirect(...)
+Cancel()
+```
+
+Также файл может отдавать JavaScript-редирект на:
+
+```text
+/default.html?auth_err=...
+```
+
+После обработки авторизации вызывается:
+
+```js
+Server.Execute(AppDirectoryPath() + "/wt/web/include/host_init.html");
+```
+
+Если `curUser != null`, файл может обновлять `web_enter_date`, регистрировать вход через LRS и ставить:
+
+```js
+Request.Session.logged_in = 1;
+```
+
+Главный вывод: `user_init.html` предназначен в первую очередь для web-страниц портала, где допустим redirect или HTML/JS-ответ. Для чистого API он может быть опасен, потому что API обычно должен вернуть JSON и HTTP-статус, а не HTML или JavaScript-редирект.
+
+Для API лучше либо напрямую вызывать:
+
+```js
+oUserInit = tools_web.user_init(Request, Request.Query);
+```
+
+и самому обрабатывать результат, либо использовать `curUserInitIgnorRedirect = true` перед подключением `user_init.html`, если это подходит конкретному сценарию.
+
+---
+
+## Как WT определяет текущего пользователя
+
+По результатам исследования рабочая цепочка выглядит так:
+
+```text
+HTTP-запрос
+    ↓
+Request
+    ↓
+Request.Session / Header / Cookie / Query
+    ↓
+tools_web.user_init(Request, Request.Query)
+    ↓
+Request.Session.Env
+    ↓
+Env.curUserID / Env.curUser
+    ↓
+Request.AuthUserID
+```
+
+`Request` существует всегда при обработке web-запроса.
+
+Но текущий пользователь в удобном виде появляется только после авторизационной инициализации.
+
+Глобальные переменные вроде:
+
+```text
+curUserID
+curUser
+curHost
+curSite
+curEnvUrl
+```
+
+не являются просто встроенными переменными ядра, доступными всегда. Они появляются после выполнения прикладной логики HCM, например через `user_init.html`.
+
+Из чата также был найден важный вывод: глобальные объекты вроде `CurUser`, `curRequest` и похожие конструкции не являются ядром. Они появляются после выполнения HCM include-файлов или другого прикладного кода. Если выполнить файл вне нужного контекста, эти переменные могут быть недоступны.
+
+---
+
+## Проверка на локальном стенде
+
+На локальном стенде был создан файл:
+
+```text
+C:\WebSoft\WebSoftServer\wt\web\test.html
+```
+
+Сначала он не открывался по адресу:
+
+```text
+http://localhost/test.html
+```
+
+и возвращал 404. Причина оказалась не в WT, а в том, что файл был положен в старую папку сервера, которая использовалась до миграции на PostgreSQL.
+
+После переноса файла в актуальную папку запущенного сервера прямой URL заработал:
+
+```text
+http://localhost/test.html
+```
+
+В тестовом файле была выполнена диагностика:
+
+```js
+oUserInit = tools_web.user_init(Request, Request.Query);
+Env = Request.Session.GetOptProperty("Env", ({}));
+```
+
+Для залогиненного пользователя `user1` результат был:
+
+```text
+oUserInit.access = true
+oUserInit.error_code =
+oUserInit.auth_type = xauthid
+oUserInit.auth_login = user1
+Env.curUserID = 6148914691236517121
+Env.curUser =
+Request.AuthUserID = 6148914691236517121
+```
+
+Это подтвердило:
+
+* прямые HTML-хендлеры работают;
+* `tools_web.user_init` определяет пользователя;
+* `Request.Session.Env.curUserID` содержит ID пользователя;
+* `Request.AuthUserID` также заполнен ID текущего пользователя;
+* текущий пользователь `user1` был определен через `xauthid`.
+
+---
+
+## Сценарий после logout
+
+После logout был выполнен повторный запрос к:
+
+```text
+/test.html
+```
+
+Результат оказался таким:
+
+```text
+oUserInit.access = true
+oUserInit.error_code =
+oUserInit.auth_type = basic
+oUserInit.auth_login = user1
+Env.curUserID = 6148914691236517121
+Env.curUser =
+Request.AuthUserID = 6148914691236517121
+```
+
+На первый взгляд это выглядело как проблема: пользователь вышел, но система все равно считает его авторизованным.
+
+После анализа HTTP-заголовков причина стала понятна.
+
+После logout браузер продолжал отправлять:
+
+```http
+Authorization: Basic dXNlcjE6dXNlcjE=
+```
+
+Это Base64-строка для:
+
+```text
+user1:user1
+```
+
+Также оставались cookies:
+
+```http
+Cookie: SessionID=1902086850487920865; x-auth-id=a73915dbaa05411381f6ceefe812caf2
+```
+
+То есть после logout запрос фактически не был анонимным. В нем оставались данные авторизации.
+
+Поэтому `tools_web.user_init` снова видел пользователя и авторизовал его, но уже через:
+
+```text
+auth_type = basic
+```
+
+Важный вывод: logout cookie/xauthid не гарантирует, что следующий запрос будет анонимным, если браузер продолжает отправлять `Authorization: Basic`.
+
+---
+
+## Сценарий в чистом незалогиненном браузере
+
+Проверка в чистом незалогиненном браузере дала ожидаемый результат:
+
+```text
+oUserInit.access = false
+oUserInit.error_code = empty_login
+oUserInit.auth_type = basic
+oUserInit.auth_login =
+Env.curUserID =
+Env.curUser =
+Request.AuthUserID =
+```
+
+Это подтвердило, что `tools_web.user_init` корректно определяет отсутствие авторизации, если запрос действительно чистый и не содержит авторизационных данных.
+
+Итоговое сравнение:
+
+Залогиненный пользователь:
+
+```text
+access = true
+auth_login = user1
+Env.curUserID заполнен
+Request.AuthUserID заполнен
+```
+
+После logout, но с оставшимся Basic Authorization:
+
+```text
+access = true
+auth_type = basic
+auth_login = user1
+Env.curUserID заполнен
+Request.AuthUserID заполнен
+```
+
+Чистый незалогиненный браузер:
+
+```text
+access = false
+error_code = empty_login
+auth_login пустой
+Env.curUserID пустой
+Request.AuthUserID пустой
+```
+
+---
+
+## Что важно для кастомных API
+
+Для кастомных API нельзя слепо ориентироваться только на то, что пользователь «нажал logout» в интерфейсе.
+
+API видит не факт нажатия logout, а текущий HTTP-запрос.
+
+Если в запросе есть:
+
+```http
+Authorization: Basic ...
+```
+
+или валидные cookie:
+
+```http
+SessionID
+x-auth-id
+```
+
+то WT может снова определить пользователя.
+
+Для API нужно проверять результат авторизации на уровне текущего запроса:
+
+```js
+oUserInit = tools_web.user_init(Request, Request.Query);
+Env = Request.Session.GetOptProperty("Env", ({}));
+curUserID = Env.GetOptProperty("curUserID", null);
+
+if (!oUserInit.access || curUserID == null || curUserID == "") {
+    Response.SetRespStatus(401, "");
+    Response.Write('{"status":"ERROR","message":"Unauthorized"}');
+    Cancel();
+}
+```
+
+Однако важно понимать: если браузер продолжает отправлять Basic Authorization, то `curUserID` будет заполнен, потому что пользователь фактически снова авторизовался.
+
+Поэтому для тестирования настоящего анонимного состояния нужно:
+
+* использовать инкогнито;
+* использовать другой браузер;
+* очистить cookies;
+* сбросить сохраненный Basic Auth;
+* отключить ненужные способы авторизации на хосте;
+* анализировать HTTP-заголовки запроса.
+
+---
+
+## Пример старого API-хендлера
+
+Был найден старый серверный файл с API-логикой. Он показывает типичный паттерн кастомного API в WT.
+
+В начале подключаются системные include-файлы:
+
+```js
+Server.Execute(AppDirectoryPath() + "/wt/web/include/user_init.html");
+Server.Execute(AppDirectoryPath() + "/wt/web/include/object_init.html");
+```
+
+Затем подключается файл с методами:
+
+```js
+Server.Execute("x-local://wt/web/timesheet/methods.html");
+```
+
+Далее выполняется авторизация:
+
+```js
+SessionUser = tools_web.user_init(Request, Request.Query);
+
+if (SessionUser.error_code == 'empty_login') {
+    Response.SetRespStatus(401, '');
+}
+```
+
+Метод выбирается из query-параметра:
+
+```js
+var action = Request.Query.GetOptProperty("action");
+```
+
+Есть список разрешенных методов:
+
+```js
+var allowedActions = [
+    "getProjects",
+    "getRowTimeSheets",
+    "updateRowTimeSheet",
+    "deleteRowTimeSheet",
+    "createRowTimeSheet",
+    "getList",
+    "execute"
+];
+```
+
+Проверка метода:
+
+```js
+if (ArrayOptFind(allowedActions, "This == '" + action + "'") != undefined) {
+    if (isActionsAllowed) {
+        retMessage.data = eval(action + "()");
+    } else {
+        Response.SetRespStatus(403, '');
+    }
+} else {
+    Response.SetRespStatus(404, '');
+}
+```
+
+Ответ сериализуется в JSON:
+
+```js
+if (IsArray(obj)) {
+    ret = tools.array_to_text(obj, "json");
+} else {
+    ret = tools.object_to_text(obj, "json");
+}
+```
+
+Ошибки логируются через:
+
+```js
+EnableLog("data-html-log", true);
+LogEvent("data-html-log", "Error: " + err);
+```
+
+Этот пример важен как практический шаблон:
+
+* server-side HTML как API endpoint;
+* `Server.Execute` для include и методов;
+* авторизация через `tools_web.user_init`;
+* чтение action из `Request.Query`;
+* whitelist разрешенных действий;
+* возврат HTTP-статусов;
+* JSON-сериализация;
+* логирование.
+
+Но есть и риск: используется `eval(action + "()")`. Это относительно защищено whitelist-ом `allowedActions`, но для нового кода лучше избегать `eval`, если в WT удастся сделать таблицу функций или другой безопасный диспетчер вызовов.
+
+---
+
+## HTTP-статусы, JSON-ответы и логирование
+
+Для API важны методы:
+
+```js
+Response.SetRespStatus(401, '');
+Response.SetRespStatus(403, '');
+Response.SetRespStatus(404, '');
+Response.Write(...);
+```
+
+В найденном примере используются статусы:
+
+```text
+401 — не авторизован
+403 — нет прав
+404 — неизвестный action / метод не найден
+```
+
+Для JSON-ответов используются:
+
+```js
+tools.object_to_text(obj, "json");
+tools.array_to_text(obj, "json");
+```
+
+Для логирования:
+
+```js
+EnableLog("data-html-log", true);
+LogEvent("data-html-log", "Error: " + err);
+```
+
+Для будущей документации нужно отдельно разобрать:
+
+* `Response`;
+* `Response.Write`;
+* `Response.SetRespStatus`;
+* `Request.SetRespStatus`, если он тоже используется;
+* `RespContentType`;
+* `AddRespHeader`;
+* возврат JSON;
+* обработку ошибок;
+* `Cancel()`.
+
+---
+
+## Важные ловушки
+
+Первая ловушка: `/_wt` — это не прямой доступ к файлу.
+
+Если открыть:
+
+```text
+/_wt/test.html
+```
+
+это не значит, что открывается физический файл:
+
+```text
+wt/web/test.html
+```
+
+`/_wt` — это короткий URL портала, связанный с `mode`, шаблонами, карточками объектов и разделами.
+
+Вторая ловушка: `x-local://` работает на сервере, но не в браузере.
+
+Правильно:
+
+```js
+Server.Execute("x-local://wt/web/project/methods.html");
+```
+
+Неправильно для клиентского HTML:
+
+```html
+<script src="x-local://wt/web/js/script.js"></script>
+```
+
+Третья ловушка: `Request` существует всегда, но текущий пользователь появляется только после авторизационной инициализации.
+
+Четвертая ловушка: `Request.AuthUserID` для web-страницы может быть установлен авторизационным кодом, а не обязательно заполнен автоматически изначально.
+
+Пятая ловушка: `tools_web.user_init` в документации описан как возвращающий булево, но фактически используется как объект `oUserInit`.
+
+Шестая ловушка: `user_init.html` может делать redirect, отдавать HTML/JS и вызывать `Cancel()`. Для API это может быть нежелательно.
+
+Седьмая ловушка: logout не гарантирует анонимный следующий запрос, если браузер продолжает отправлять Basic Authorization или валидные cookies.
+
+Восьмая ловушка: после logout можно увидеть `access = true`, но это может быть не ошибка WT, а повторная авторизация через Basic Auth.
+
+Девятая ловушка: при тестах обязательно смотреть HTTP-заголовки и cookies. Без этого можно неверно понять поведение авторизации.
+
+Десятая ловушка: если WT был перенесен или мигрирован, легко положить файл в старую папку сервера. Нужно проверять актуальный `WebSoftServer/wt/web`, откуда реально запущен сервер.
+
+---
+
+## Что нужно искать дальше
+
+Для продолжения исследования нужно искать документацию и код по следующим темам:
+
+```text
+Server.Execute
+AppDirectoryPath
+Response
+Response.Write
+Response.SetRespStatus
+Request.SetRespStatus
+Request.Header
+Request.Session
+Request.Cookies
+Request.AuthLogin
+Request.AuthPassword
+Request.AuthObject
+Request.CheckLdsAuth
+Request.SetWrongAuth
+tools_web.set_cookie_auth
+tools_web.user_init
+tools_web.get_host_obj
+include/access_init.html
+include/host_init.html
+include/object_init.html
+Cancel
+IsCancelError
+OpenDoc
+UrlFromDocID
+tools.object_to_text
+tools.array_to_text
+EnableLog
+LogEvent
+ArrayOptFind
+```
+
+Особенно важно найти и изучить:
+
+```text
+wtv_tools_web.xml
+```
+
+потому что именно там содержится программное описание функций библиотеки `Tools_web`.
+
+Также нужно найти реальное описание или исходники:
+
+```text
+tools_web.user_init
+tools_web.set_cookie_auth
+access_init.html
+host_init.html
+object_init.html
+```
+
+---
+
+## Предварительные правила для будущей локальной документации
+
+Первое правило: отдельно разделять физические HTML-хендлеры и шаблоны портала.
+
+Физический хендлер:
+
+```text
+wt/web/company/project/api.html
+```
+
+вызывается напрямую:
+
+```text
+/company/project/api.html
+```
+
+Шаблон портала может использовать внешний файл из `wt/web`, но вызывается через карточку шаблона, `mode`, `view_doc.html` или `/_wt`.
+
+Второе правило: отдельно описывать контексты путей.
+
+Серверный путь:
+
+```js
+Server.Execute("x-local://wt/web/project/methods.html");
+```
+
+Клиентский путь:
+
+```html
+<script src="/project/script.js"></script>
+```
+
+Третье правило: авторизация должна рассматриваться через текущий HTTP-запрос, а не через состояние интерфейса.
+
+Если запрос содержит Basic Authorization или валидные cookies, WT может авторизовать пользователя заново.
+
+Четвертое правило: для API лучше самостоятельно контролировать ответ на неавторизованный запрос.
+
+Не полагаться бездумно на `user_init.html`, потому что он может сделать redirect или HTML/JS-ответ.
+
+Пятое правило: для проверки текущего пользователя нужно смотреть связку:
+
+```js
+oUserInit = tools_web.user_init(Request, Request.Query);
+Env = Request.Session.GetOptProperty("Env", ({}));
+curUserID = Env.GetOptProperty("curUserID", null);
+Request.AuthUserID;
+```
+
+Шестое правило: `oUserInit.access` полезен, но его нужно интерпретировать вместе с:
+
+```text
+oUserInit.error_code
+oUserInit.auth_type
+oUserInit.auth_login
+Env.curUserID
+Request.AuthUserID
+HTTP-заголовками
+cookies
+```
+
+Седьмое правило: для диагностики авторизации всегда фиксировать:
+
+```text
+oUserInit.access
+oUserInit.error_code
+oUserInit.auth_type
+oUserInit.auth_login
+Env.curUserID
+Env.curUser
+Request.AuthUserID
+Authorization header
+Cookie header
+```
+
+Восьмое правило: найденные примеры из старых проектов полезны, но их нужно перепроверять на текущей версии WT, потому что поведение авторизации, short URL, шаблонов и include-файлов может меняться.
+
+---
+
+## Краткий итог
+
+На текущем этапе удалось подтвердить базовую модель кастомного API в WebTutor / WebSoft HCM.
+
+Серверный код может выполняться внутри `.html`-файлов, размещенных в `wt/web`. Такие файлы могут открываться напрямую по URL и использоваться как API-хендлеры. Для определения пользователя ключевую роль играет `tools_web.user_init(Request, Request.Query)`. Эта функция анализирует текущий HTTP-запрос, параметры, cookies, session, заголовки авторизации и заполняет окружение пользователя.
+
+Текущий пользователь после инициализации доступен через:
+
+```text
+Request.Session.Env.curUserID
+Request.AuthUserID
+```
+
+Системный `user_init.html` делает больше, чем просто определяет пользователя: он обрабатывает ошибки доступа, редиректы, host/site окружение и портальную логику. Поэтому для API его нужно использовать осторожно.
+
+Главная практическая ловушка: после logout браузер может продолжать отправлять `Authorization: Basic`, из-за чего WT снова авторизует пользователя. Поэтому при отладке API нужно смотреть реальные HTTP-заголовки и cookies, а не только факт нажатия кнопки logout.
+
+Этот материал нужно сохранить как основу будущей локальной документации по WT API, особенно для разделов про серверные HTML-хендлеры, авторизацию, `Request`, `tools_web.user_init`, шаблоны портала и короткие URL.
