@@ -1,5 +1,85 @@
 # Источники
 
+## Обработано 2026-06-18: каталоги и объектная модель
+
+### `INBOX/webtutor_database_object_model_catalogs.md`
+
+- Тип: Markdown.
+- Тема: база данных WebTutor, объектная модель, XML-представление объектов, XMD-файлы, каталоги, `person_hierarchys`, справочник каталогов, каталог `websoft.hcm.collaborator`.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-18/catalogs/webtutor_database_object_model_catalogs.md`.
+- Создано/обновлено:
+  - `docs/catalogs/object-model-and-catalogs.md`
+  - `docs/catalogs/collaborators.md`
+  - `rag/catalogs/object_model_xmd_catalogs.md`
+  - `rag/catalogs/person_hierarchys.md`
+  - `rag/catalogs/catalogs_reference_1_26_05_21.md`
+  - `rag/catalogs/websoft_hcm_collaborator_catalog.md`
+  - `index/map.md`
+  - `index/sources.md`
+  - `index/glossary.md`
+  - `index/open_questions.md`
+
+### `INBOX/webtutor_link_catalogs.md`
+
+- Тип: Markdown.
+- Тема: каталоги-связки WebTutor, состав для версии `331 (2021.2.3.331)`, использование в `XQuery`.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-18/catalogs/webtutor_link_catalogs.md`.
+- Создано/обновлено:
+  - `docs/catalogs/link-catalogs.md`
+  - `rag/catalogs/link_catalogs.md`
+  - `index/map.md`
+  - `index/sources.md`
+  - `index/glossary.md`
+  - `index/open_questions.md`
+
+## Обработано 2026-06-18
+
+### `INBOX/xml-doc-objects-xmldoc-ai-friendly.md`
+
+- Тип: Markdown.
+- Тема: объект `XmlDoc`, свойства и методы XML-документа.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-18/xml-objects/xml-doc-objects-xmldoc-ai-friendly.md`.
+- Создано/обновлено:
+  - `docs/spxml-objects/xml-doc-objects.md`
+  - `rag/spxml-objects/xmldoc.md`
+  - `rag/spxml-functions/bind_to_db.md`
+  - `index/map.md`
+  - `index/sources.md`
+  - `index/glossary.md`
+  - `index/open_questions.md`
+
+### `INBOX/xml-doc-objects-xmlelem-ai-friendly.md`
+
+- Тип: Markdown.
+- Тема: объект `XmlElem`, свойства XML-элемента, безопасное чтение, удаление элементов.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-18/xml-objects/xml-doc-objects-xmlelem-ai-friendly.md`.
+- Создано/обновлено:
+  - `docs/spxml-objects/xml-doc-objects.md`
+  - `rag/spxml-objects/xmlelem_delete.md`
+  - `rag/spxml-objects/safe_opt_methods.md`
+  - `index/map.md`
+  - `index/sources.md`
+  - `index/glossary.md`
+  - `index/open_questions.md`
+
+### `INBOX/xml-doc-objects-xmlmultielem-ai-friendly.md`
+
+- Тип: Markdown.
+- Тема: объект `XmlMultiElem`, множественные XML-элементы, добавление, поиск, очистка и удаление.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-18/xml-objects/xml-doc-objects-xmlmultielem-ai-friendly.md`.
+- Создано/обновлено:
+  - `docs/spxml-objects/xml-doc-objects.md`
+  - `rag/spxml-objects/xmlmultielem.md`
+  - `index/map.md`
+  - `index/sources.md`
+  - `index/glossary.md`
+  - `index/open_questions.md`
+
 ## Обработано 2026-06-17
 
 ### `INBOX/spxml-basic-object-array.md`

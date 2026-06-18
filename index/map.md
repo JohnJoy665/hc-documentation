@@ -1,5 +1,25 @@
 # Карта базы знаний WebSoft HCM / WebTutor
 
+## Дополнение от 2026-06-18: объектная модель, XMD и каталоги
+
+- `docs/catalogs/object-model-and-catalogs.md` - база данных WebTutor, объектная модель, XML-представление объектов, XMD-файлы, каталоги, `person_hierarchys`, справочник каталогов версии `1.26.05.21`.
+- `docs/catalogs/link-catalogs.md` - каталоги-связки как `view` поверх нескольких стандартных каталогов, использование в `XQuery`, список примеров для версии `331 (2021.2.3.331)`.
+- `rag/catalogs/object_model_xmd_catalogs.md` - атомарная заметка по связи объектной модели, XML, XMD и каталогов.
+- `rag/catalogs/person_hierarchys.md` - атомарная заметка по каталогу `person_hierarchys`.
+- `rag/catalogs/catalogs_reference_1_26_05_21.md` - атомарная заметка по справочнику каталогов версии `1.26.05.21`.
+- `rag/catalogs/websoft_hcm_collaborator_catalog.md` - атомарная заметка по каталогу `websoft.hcm.collaborator`.
+- `rag/catalogs/link_catalogs.md` - атомарная заметка по каталогам-связкам.
+- `docs/catalogs/collaborators.md` - дополнен связью с `websoft.hcm.collaborator` и вопросом о соотношении имен `collaborators`, `dbo.collaborators`, `websoft.hcm.collaborator`.
+
+## Дополнение от 2026-06-18: XML-объекты
+
+- `docs/spxml-objects/xml-doc-objects.md` - связная справка по объектам `XmlDoc`, `XmlElem`, `XmlMultiElem` во внутреннем серверном языке WebTutor / SP-XML.
+- `rag/spxml-objects/xmldoc.md` - атомарная заметка по объекту `XmlDoc`, его свойствам и методам сохранения.
+- `rag/spxml-objects/xmlelem_delete.md` - атомарная заметка по удалению XML-элементов и дочерних элементов.
+- `rag/spxml-objects/xmlmultielem.md` - атомарная заметка по множественным XML-элементам `XmlMultiElem`.
+- `rag/spxml-objects/safe_opt_methods.md` - атомарная заметка по безопасным `Opt*`-методам.
+- `rag/spxml-functions/bind_to_db.md` - дополнена предупреждением, что `XmlDoc.BindToDb()` в новом источнике помечен как deprecated, но в локальном эксперименте создания `collaborator` через агент работал с `DefaultDb`.
+
 ## Покрытые темы
 
 ### Платформа SP-XML и внутренний серверный язык

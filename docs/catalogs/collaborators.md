@@ -5,6 +5,7 @@ source_files:
   - "raw/2026-06-17/catalogs/collaborators-schema-and-document-example.md"
   - "raw/2026-06-17/code-libraries/tools-new-doc-by-name.md"
   - "raw/2026-06-17/agents/create-collaborators-agent-bind-to-db-experiment.md"
+  - "raw/2026-06-18/catalogs/webtutor_database_object_model_catalogs.md"
 status: "draft"
 ---
 
@@ -19,6 +20,10 @@ status: "draft"
 ## Каталог для чтения
 
 Подтвержденные пользовательским источником читаемые поля каталога включают `id`, `fullname`, `login`, `email`, поля должности, подразделения, организации, флаги доступа и статуса.
+
+Дополнительный источник от 2026-06-18 содержит таблицу каталога `websoft.hcm.collaborator` (`Сотрудник`). В ней, кроме ранее зафиксированных полей, встречаются `birth_day`, `birth_month`, `current_state_id`, `avatar_filename`. Часть ссылочных полей указывает на каталоги вида `websoft.hcm.positions`, `websoft.hcm.subdivisions`, `websoft.hcm.orgs`.
+
+TODO: нужно проверить, как соотносятся имена `collaborators`, `dbo.collaborators` и `websoft.hcm.collaborator` в конкретной версии и конкретном контексте `XQuery`.
 
 Пример чтения каталога, проверенный пользователем в агенте:
 
