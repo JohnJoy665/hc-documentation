@@ -2,6 +2,82 @@
 
 ## Обработано 2026-06-17
 
+### `INBOX/spxml-basic-object-array.md`
+
+- Тип: markdown-справочник.
+- Тема: базовый объект `Array`, свойства и методы массива.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-17/spxml-basic-objects/spxml-basic-object-array.md`.
+- Создано/обновлено:
+  - `docs/spxml-basic-objects/basic-objects-overview.md`
+  - `rag/spxml-basic-objects/array_basic_methods.md`
+
+### `INBOX/spxml-basic-object-binary.md`
+
+- Тип: markdown-справочник.
+- Тема: базовый объект `Binary`, статус устаревшего объекта, бинарные данные.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-17/spxml-basic-objects/spxml-basic-object-binary.md`.
+- Создано/обновлено:
+  - `docs/spxml-basic-objects/basic-objects-overview.md`
+  - `rag/spxml-basic-objects/binary_deprecated.md`
+
+### `INBOX/spxml-basic-object-object.md`
+
+- Тип: markdown-справочник.
+- Тема: базовый объект `Object`, динамические свойства, `GetOptProperty()`.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-17/spxml-basic-objects/spxml-basic-object-object.md`.
+- Создано/обновлено:
+  - `docs/spxml-basic-objects/basic-objects-overview.md`
+  - `rag/spxml-basic-objects/object_getoptproperty.md`
+
+### `INBOX/spxml-basic-object-string.md`
+
+- Тип: markdown-справочник.
+- Тема: базовый объект `String`, длина в байтах, методы строки.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-17/spxml-basic-objects/spxml-basic-object-string.md`.
+- Создано/обновлено:
+  - `docs/spxml-basic-objects/basic-objects-overview.md`
+  - `rag/spxml-basic-objects/string_length_bytes.md`
+
+### `INBOX/spxml-basic-objects-class-cache-error-methodreference.md`
+
+- Тип: markdown-справочник.
+- Тема: `ClassObject`, `ClassObjectsArray`, `DataCache`, `Error`, `MethodReference`.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-17/spxml-basic-objects/spxml-basic-objects-class-cache-error-methodreference.md`.
+- Создано/обновлено:
+  - `docs/spxml-basic-objects/basic-objects-overview.md`
+  - `rag/spxml-basic-objects/datacache_globalcache_globalstorage.md`
+  - `rag/spxml-basic-objects/methodreference_callback.md`
+
+### `INBOX/spxml-xquery-query-syntax.md`
+
+- Тип: markdown-справочник.
+- Тема: синтаксис XQuery в SP-XML, запросы к каталогам, функции `contains`, `doc-contains`, `MatchSome`.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-17/xquery/spxml-xquery-query-syntax.md`.
+- Создано/обновлено:
+  - `docs/xquery/xquery-syntax.md`
+  - `rag/xquery/basic_for_where_return.md`
+  - `rag/xquery/collaborators_queries.md`
+  - `rag/xquery/literals_true_false_null_date.md`
+  - `rag/xquery/matchsome_doc_contains.md`
+  - `rag/xquery/fields_return.md`
+
+### `INBOX/XQuery синтаксис.pdf`
+
+- Тип: PDF.
+- Тема: практические примеры XQuery: `collaborators`, `assessments`, `courses`, `test_learnings`, сортировка.
+- Статус обработки: текст извлечен и обработан.
+- Raw-копия: `raw/2026-06-17/xquery/xquery-syntax.pdf`.
+- Извлеченный текст: `raw/2026-06-17/xquery/xquery-syntax.txt`.
+- Создано/обновлено:
+  - `docs/xquery/xquery-syntax.md`
+  - `rag/xquery/collaborators_queries.md`
+
 ### `INBOX/spxml_application_structure.md`
 
 - Тип: markdown-справочник.
@@ -392,4 +468,54 @@
 - Raw-копия: `raw/2026-06-17/pdf/node-authentication-settings.pdf`.
 - Извлеченный текст: `raw/2026-06-17/pdf/node-authentication-settings.txt` (пустой/неинформативный).
 - Создано/обновлено:
+  - `index/open_questions.md`
+
+### `Сообщение пользователя от 2026-06-17: dbo.collaborators и XML-документ collaborator`
+
+- Тип: пользовательский технический источник в диалоге.
+- Тема: каталог `collaborators`, читаемые поля, XML-документ сотрудника для записи.
+- Статус обработки: обработан. Для создания нового документа сотрудника зафиксирован рабочий путь через `tools.new_doc_by_name('collaborator', false)` и `BindToDb(DefaultDb)`.
+- Raw-копия: `raw/2026-06-17/catalogs/collaborators-schema-and-document-example.md`.
+- Создано/обновлено:
+  - `docs/catalogs/collaborators.md`
+  - `rag/catalogs/collaborators_read_fields.md`
+  - `rag/catalogs/collaborator_document_write.md`
+  - `rag/spxml-functions/log_event.md`
+  - `index/map.md`
+  - `index/sources.md`
+  - `index/glossary.md`
+  - `index/open_questions.md`
+
+### `Сообщение пользователя от 2026-06-17: tools.new_doc_by_name`
+
+- Тип: пользовательский технический источник в диалоге.
+- Тема: библиотека `tools`, функция `tools.new_doc_by_name`.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-17/code-libraries/tools-new-doc-by-name.md`.
+- Создано/обновлено:
+  - `docs/agents/create-collaborators-agent.md`
+  - `docs/code-libraries/tools-library.md`
+  - `docs/catalogs/collaborators.md`
+  - `rag/code-libraries/tools_new_doc_by_name.md`
+  - `rag/catalogs/collaborator_document_write.md`
+  - `index/map.md`
+  - `index/sources.md`
+  - `index/glossary.md`
+
+### `Сообщение пользователя от 2026-06-17: BindToDb при создании collaborator`
+
+- Тип: пользовательский эксперимент в агенте.
+- Тема: создание сотрудников через агент, `tools.new_doc_by_name`, `BindToDb`, ошибки `Empty document url` и `Unknown object property: lastname`.
+- Статус обработки: обработан.
+- Raw-копия: `raw/2026-06-17/agents/create-collaborators-agent-bind-to-db-experiment.md`.
+- Создано/обновлено:
+  - `docs/code-libraries/tools-library.md`
+  - `docs/catalogs/collaborators.md`
+  - `rag/spxml-functions/bind_to_db.md`
+  - `rag/agents/create_collaborators_agent.md`
+  - `rag/code-libraries/tools_new_doc_by_name.md`
+  - `rag/catalogs/collaborator_document_write.md`
+  - `index/map.md`
+  - `index/sources.md`
+  - `index/glossary.md`
   - `index/open_questions.md`

@@ -26,9 +26,38 @@
 - `rag/spxml-functions/url_load_put_exists.md` - URL-функции чтения/записи/проверки.
 - `rag/spxml-functions/filesystem_read_write_delete.md` - обзор файловых функций.
 
+### Базовые объекты SP-XML
+
+- `docs/spxml-basic-objects/basic-objects-overview.md` - `Array`, `Object`, `String`, `Binary`, `DataCache`, `Error`, `MethodReference` и другие базовые объекты.
+- `rag/spxml-basic-objects/object_getoptproperty.md` - безопасное чтение свойств через `GetOptProperty()`.
+- `rag/spxml-basic-objects/array_basic_methods.md` - базовые методы `Array`.
+- `rag/spxml-basic-objects/string_length_bytes.md` - `String.length` как длина в байтах.
+- `rag/spxml-basic-objects/datacache_globalcache_globalstorage.md` - `DataCache`, `GlobalCache`, `GlobalStorage`.
+- `rag/spxml-basic-objects/methodreference_callback.md` - `MethodReference` как ссылка на метод.
+- `rag/spxml-basic-objects/binary_deprecated.md` - `Binary` как устаревший объект.
+
+### XQuery
+
+- `docs/xquery/xquery-syntax.md` - синтаксис XQuery в SP-XML / WebTutor.
+- `rag/xquery/basic_for_where_return.md` - базовая форма `for/where/order by/return`.
+- `rag/xquery/collaborators_queries.md` - примеры запросов к `collaborators`.
+- `rag/xquery/literals_true_false_null_date.md` - `true()`, `false()`, `null()`, `date()`.
+- `rag/xquery/matchsome_doc_contains.md` - `MatchSome()` и `doc-contains()`.
+- `rag/xquery/fields_return.md` - возврат ограниченного набора полей через `Fields(...)`.
+
+### Каталоги и документы
+
+- `docs/catalogs/collaborators.md` - каталог `collaborators`, читаемые поля и документ `collaborator` для записи.
+- `rag/catalogs/collaborators_read_fields.md` - атомарная заметка по читаемым полям `collaborators`.
+- `rag/catalogs/collaborator_document_write.md` - атомарная заметка: запись сотрудника через документ, а не через таблицу каталога.
+- `rag/spxml-functions/log_event.md` - `EnableLog`, `EnableLogExt`, `LogEvent` для журналирования.
+- `rag/spxml-functions/bind_to_db.md` - `BindToDb(DefaultDb)` для связывания нового документа с базой данных.
+- `rag/agents/create_collaborators_agent.md` - проверенный фрагмент агента создания сотрудников.
+
 ### Агенты сервера
 
 - `docs/agents/server-agents.md` - агенты сервера WebTutor / WebSoft HCM.
+- `docs/agents/create-collaborators-agent.md` - проверенный рецепт агента создания сотрудников через `tools.new_doc_by_name` и `BindToDb`.
 - `rag/agents/server_agents.md` - базовая заметка по агентам.
 - `rag/agents/agent_alert_diagnostics.md` - `alert(...)` как диагностический вывод агента.
 
@@ -39,6 +68,8 @@
 - `rag/code-libraries/call_object_method_with_lock.md`
 - `rag/code-libraries/get_object_property.md`
 - `rag/code-libraries/get_class_object_property_names.md`
+- `docs/code-libraries/tools-library.md` - библиотека `tools`, включая `tools.new_doc_by_name`.
+- `rag/code-libraries/tools_new_doc_by_name.md` - атомарная заметка по созданию нового объекта через `tools.new_doc_by_name`.
 
 ### Установка и локальный контур
 
@@ -85,7 +116,7 @@
 - Детальные функции `Tools`, `Tools_web`, `Tools_library`, `Ms_tools`.
 - Полные карточки объектов и каталогов.
 - Настройка агентов в администраторе по PDF требует OCR/ручной проверки.
-- XQuery пока покрыт только через карту раздела, без отдельной документации.
+- XQuery покрыт базово; нужны карточки каталогов и проверка полного списка полей.
 - XAML и интерфейс пока покрыты только через карту раздела.
 - PDF по карточке узла и настройке аутентификации узла требуют OCR/ручной проверки.
 
@@ -99,3 +130,9 @@
 - `CallObjectMethod` и `GetObjectProperty` связаны с API routing, где методы и свойства могут вызываться динамически.
 - `FetchDoc()` связан с кэшем документов, описанным в структуре приложения.
 - Строковые функции связаны с правилом о бинарно-совместимых строках SP-XML Script.
+- `Object.GetOptProperty()` связан с безопасным чтением параметров в серверных HTML-хендлерах и агентах.
+- `XQuery` связан с каталогами `collaborators`, `events`, `courses`, `assessments`, `test_learnings`.
+- `collaborators` связан с XQuery для чтения каталога и с XML-документом `collaborator` для записи.
+- `LogEvent` связан с агентами сервера, где нужен отдельный журнал выполнения.
+- `tools.new_doc_by_name('collaborator', false)` связан с созданием нового документа сотрудника.
+- `BindToDb(DefaultDb)` связан с `tools.new_doc_by_name(...)`: без привязки к базе `Save()` может вернуть `Empty document url`.
